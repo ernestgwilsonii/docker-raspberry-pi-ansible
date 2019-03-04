@@ -1,0 +1,22 @@
+version: '3.4'
+
+services:
+
+  ansible:
+    image: ernestgwilsonii/docker-raspberry-pi-ansible:2.7.8
+    hostname: ansible
+    networks:
+      - ansible-net1
+    volumes:
+      - type: bind
+        source: /etc/ansible
+        target: /etc/ansible
+    deploy:
+      labels:
+        local.description: "ansible"
+      restart_policy:
+        condition: on-failure
+
+networks:
+  ansible-net1:
+
