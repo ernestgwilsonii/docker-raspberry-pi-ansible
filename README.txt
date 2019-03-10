@@ -5,11 +5,13 @@
 
 ###############################################################################
 # Docker build
+sudo bash
 time docker build --no-cache -t ernestgwilsonii/docker-raspberry-pi-ansible:2.7.8 -f Dockerfile.armhf .
 docker images
 
 # Verify 
 docker run --rm ernestgwilsonii/docker-raspberry-pi-ansible:2.7.8 ansible --version
+docker run --rm ernestgwilsonii/docker-raspberry-pi-ansible:2.7.8 ansible-playbook --version
 
 # Upload to Docker Hub
 docker login
@@ -31,7 +33,7 @@ mkdir -p /etc/ansible/templates
 mkdir -p /etc/ansible/vault
 # Create a starting /etc/ansible/hosts file
 echo "[raspberrypi]" >> /etc/ansible/hosts
-echo "localhost ansible_host=127.0.0.1" >> /etc/ansible/hosts
+echo "localhost ansible_host=$(hostname -I | awk '{print $1}')" >> /etc/ansible/hosts
 echo " " >> /etc/ansible/hosts
 # Create a starting /etc/ansible/vault/vault_pass.txt file
 echo "raspberry" >> /etc/ansible/vault/vault_pass.txt
@@ -68,14 +70,15 @@ wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/RaspberryP
 wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/RaspberryPi_Raspbian-Install-Docker-playbook.yml
 
 
-# Setup an "ansible" alias for BASH
-#alias 'ansible=docker run --rm -v /etc/ansible:/etc/ansible ernestgwilsonii/docker-raspberry-pi-ansible:2.7.8 ansible'
-alias 'ansible=docker run --rm ernestgwilsonii/docker-raspberry-pi-ansible:2.7.8 ansible'
-
+# Create "ansible" command aliases in BASH for use on Raspberry Pi
+alias 'ansible=sudo docker run --rm -v /etc/ansible:/etc/ansible ernestgwilsonii/docker-raspberry-pi-ansible:2.7.8 ansible'
+alias 'ansible-playbook=sudo docker run --rm -v /etc/ansible:/etc/ansible ernestgwilsonii/docker-raspberry-pi-ansible:2.7.8 ansible-playbook'
 
 # Test
 ansible --version
-
+ansible-playbook --version
+#ansible-playbook /etc/ansible/RaspberryPi_Raspbian-Apply-OS-Updates-playbook.yml --extra-vars 'HostOrGroup=raspberrypi'
+#ansible-playbook /etc/ansible/RaspberryPi_Raspbian-Install-Docker-playbook.yml --extra-vars 'HostOrGroup=raspberrypi'
 
 ##########
 # Deploy #
@@ -87,5 +90,4 @@ docker stack deploy -c docker-compose.yml ansible
 # Verify
 docker service ls | grep ansible
 docker service logs -f ansible
-
 ###############################################################################
