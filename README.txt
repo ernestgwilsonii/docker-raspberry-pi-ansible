@@ -1,7 +1,7 @@
-###########################################
-# Ansible Docker for Raspberry Pi         #
-#   REF: https://docs.ansible.com/ansible # 
-###########################################
+####################################################
+# Ansible (in a Docker Container) for Raspberry Pi #
+#            REF: https://docs.ansible.com/ansible # 
+####################################################
 
 ###############################################################################
 # Docker build
@@ -73,10 +73,14 @@ wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/RaspberryP
 # Create "ansible" command aliases in BASH for use on Raspberry Pi
 alias 'ansible=sudo docker run --rm -v /etc/ansible:/etc/ansible ernestgwilsonii/docker-raspberry-pi-ansible:2.7.8 ansible'
 alias 'ansible-playbook=sudo docker run --rm -v /etc/ansible:/etc/ansible ernestgwilsonii/docker-raspberry-pi-ansible:2.7.8 ansible-playbook'
+alias 'ansible=sudo docker run --rm -v /etc/ansible:/etc/ansible ernestgwilsonii/docker-raspberry-pi-ansible:2.7.8 ansible'
+alias 'docker-compose=sudo docker run --rm ernestgwilsonii/docker-raspberry-pi-ansible:2.7.8 docker-compose'
+#alias 'docker-compose=sudo docker run --rm -v $(pwd):$(pwd) ernestgwilsonii/docker-raspberry-pi-ansible:2.7.8 docker-compose'
 
 # Test
 ansible --version
 ansible-playbook --version
+docker-compose --version
 #ansible-playbook /etc/ansible/RaspberryPi_Raspbian-Apply-OS-Updates-playbook.yml --extra-vars 'HostOrGroup=raspberrypi'
 #ansible-playbook /etc/ansible/RaspberryPi_Raspbian-Install-Docker-playbook.yml --extra-vars 'HostOrGroup=raspberrypi'
 

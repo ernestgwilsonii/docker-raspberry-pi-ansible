@@ -9,6 +9,7 @@ apt-get install -y build-essential make g++ libssl-dev libffi-dev
 apt-get install -y sshpass 
 pip install --upgrade pip
 pip install --upgrade ansible
+pip install --upgrade docker-compose
 apt-get remove -y build-essential make g++ libssl-dev libffi-dev
 apt-get purge -y build-essential make g++ libssl-dev libffi-dev
 apt-get clean -y
@@ -18,3 +19,5 @@ rm -rf /root/.cache
 rm -rf /var/lib/apt/lists/*
 
 ansible --version
+ansible-playbook --version
+docker-compose --version
